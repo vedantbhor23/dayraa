@@ -69,7 +69,40 @@ export function Workspace({ view }: { view: View }) {
   }
   async function toggleTask(item: Item) { const { error } = await supabase.from("life_items").update({ completed: !item.completed }).eq("id", item.id); if (error) setMessage(error.message); else await invalidate(); }
   async function deleteItem(item: Item) { if (!window.confirm(`Delete this ${item.kind}? This cannot be undone.`)) return; const { error } = await supabase.from("life_items").delete().eq("id", item.id); if (error) setMessage(error.message); else await invalidate(); }
-  async function saveProfile(e: FormEvent) { e.preventDefault(); if (!userId) return; const { error } = await supabase.from("profiles").update({ display_name: name.trim(), username: username.trim() || null, theme }).eq("id", userId); setMessage(error ? error.message : "Changes saved."); }
+  async function saveProfile(e: FormEvent) { e.preventDefault(); if (!userId) return; if (!name.trim()) { setMessage("Please add a display name."); return; } const { error } = await supabase.from("profiles").update({ display_name: name.trim(), username: username.trim() || null, bio: bio.trim() }).eq("id", userId); setMessage(error ? (error.code === "23505" ? "That username is taken." : error.message) : "Profile saved."); }
+  async function uploadAvatar(file: File | undefined) {
+    if (!file || !userId) return;
+    if (!file.type.startsWith("image/")) { setMessage("Please choose an image file."); return; }
+    if (file.size > 5 * 1024 * 1024) { setMessage("Pictures must be under 5 MB."); return; }
+    setUploading(true); setMessage("");
+    const path = `${userId}/avatar-${Date.now()}.${file.name.split(".").pop() || "jpg"}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { contentType: file.type });
+    if (error) { setUploading(false); setMessage(error.message); return; }
+    const old = avatarPath;
+    const { error: updateError } = await supabase.from("profiles").update({ avatar_url: path }).eq("id", userId);
+    setUploading(false);
+    if (updateError) { setMessage(updateError.message); return; }
+    if (old) await supabase.storage.from("avatars").remove([old]);
+    setAvatarPath(path); setMessage("Profile picture updated.");
+  }
+  async function removeAvatar() {
+    if (!userId || !avatarPath) return;
+    const { error } = await supabase.from("profiles").update({ avatar_url: null }).eq("id", userId);
+    if (error) { setMessage(error.message); return; }
+    await supabase.storage.from("avatars").remove([avatarPath]); setAvatarPath(null); setMessage("Profile picture removed.");
+  }
+  async function changePassword(e: FormEvent) {
+    e.preventDefault(); setPwMessage("");
+    if (newPassword.length < 8) { setPwMessage("Use at least 8 characters."); return; }
+    if (newPassword !== confirmPassword) { setPwMessage("Passwords don't match."); return; }
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) { setPwMessage(error.message); return; }
+    setNewPassword(""); setConfirmPassword(""); setPwMessage("Password updated.");
+  }
+  async function savePref(patch: { theme?: string; week_start?: string; start_page?: string }) {
+    if (!userId) return; const { error } = await supabase.from("profiles").update(patch).eq("id", userId); setMessage(error ? error.message : "Preferences saved.");
+  }
+  const Avatar = ({ size }: { size: string }) => avatarUrl ? <img src={avatarUrl} alt="Profile picture" className={`${size} rounded-full object-cover`} /> : <span className={`${size} flex items-center justify-center rounded-full bg-leaf font-display text-leaf-foreground`}>{name?.charAt(0).toUpperCase() || "D"}</span>;
   async function signOut() { await queryClient.cancelQueries(); queryClient.clear(); await supabase.auth.signOut(); navigate({ to: "/auth", replace: true }); }
   const NavLink = ({ to, icon: Icon, text, active }: { to: string; icon: typeof Home; text: string; active: boolean }) => <Link to={to} className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors ${active ? "bg-accent font-semibold text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}><Icon className="size-[18px]" strokeWidth={1.8} /><span>{text}</span>{text === "Tasks" && taskCount > 0 && <span className="ml-auto text-xs text-muted-foreground">{taskCount}</span>}</Link>;
   const SectionLabel = ({ children }: { children: string }) => <div className="px-3 pb-2 pt-6 text-[10px] font-bold uppercase text-muted-foreground">{children}</div>;
