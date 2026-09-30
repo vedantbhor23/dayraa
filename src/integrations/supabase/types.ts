@@ -14,6 +14,68 @@ export type Database = {
   }
   public: {
     Tables: {
+      connections: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      item_shares: {
+        Row: {
+          can_edit: boolean
+          created_at: string
+          grantee_id: string
+          id: string
+          item_id: string
+          owner_id: string
+        }
+        Insert: {
+          can_edit?: boolean
+          created_at?: string
+          grantee_id: string
+          id?: string
+          item_id: string
+          owner_id: string
+        }
+        Update: {
+          can_edit?: boolean
+          created_at?: string
+          grantee_id?: string
+          id?: string
+          item_id?: string
+          owner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_shares_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "life_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       life_items: {
         Row: {
           body: string
@@ -27,6 +89,7 @@ export type Database = {
           owner_id: string
           title: string
           updated_at: string
+          visibility: string
         }
         Insert: {
           body?: string
@@ -40,6 +103,7 @@ export type Database = {
           owner_id: string
           title?: string
           updated_at?: string
+          visibility?: string
         }
         Update: {
           body?: string
@@ -53,6 +117,7 @@ export type Database = {
           owner_id?: string
           title?: string
           updated_at?: string
+          visibility?: string
         }
         Relationships: []
       }
@@ -61,8 +126,11 @@ export type Database = {
           avatar_url: string | null
           bio: string
           created_at: string
+          default_visibility: string
+          discoverability: string
           display_name: string
           id: string
+          profile_visibility: string
           start_page: string
           theme: string
           updated_at: string
@@ -73,8 +141,11 @@ export type Database = {
           avatar_url?: string | null
           bio?: string
           created_at?: string
+          default_visibility?: string
+          discoverability?: string
           display_name?: string
           id: string
+          profile_visibility?: string
           start_page?: string
           theme?: string
           updated_at?: string
@@ -85,8 +156,11 @@ export type Database = {
           avatar_url?: string | null
           bio?: string
           created_at?: string
+          default_visibility?: string
+          discoverability?: string
           display_name?: string
           id?: string
+          profile_visibility?: string
           start_page?: string
           theme?: string
           updated_at?: string
@@ -100,7 +174,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      are_connected: { Args: { _a: string; _b: string }; Returns: boolean }
+      can_view_profile: { Args: { _owner: string }; Returns: boolean }
+      search_people: {
+        Args: { _q: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
