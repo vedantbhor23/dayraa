@@ -1,0 +1,5 @@
+ALTER TABLE public.profiles ADD COLUMN bio text NOT NULL DEFAULT '', ADD COLUMN week_start text NOT NULL DEFAULT 'monday' CHECK (week_start IN ('sunday','monday')), ADD COLUMN start_page text NOT NULL DEFAULT 'home' CHECK (start_page IN ('home','diary','task','goal','note','memory','event'));
+CREATE POLICY "avatars_owner_select" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "avatars_owner_insert" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "avatars_owner_update" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "avatars_owner_delete" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text);
