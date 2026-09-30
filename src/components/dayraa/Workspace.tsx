@@ -39,7 +39,7 @@ export function Workspace({ view }: { view: View }) {
       setUserId(data.user.id);
       const { data: profile } = await supabase.from("profiles").select("display_name,username,theme").eq("id", data.user.id).maybeSingle();
       if (profile) { setName(profile.display_name); setUsername(profile.username ?? ""); setTheme(profile.theme); }
-      else { const displayName = String(data.user.user_metadata?.display_name ?? data.user.user_metadata?.full_name ?? ""); await supabase.from("profiles").upsert({ id: data.user.id, display_name: displayName }); setName(displayName); }
+      else { const displayName = String(data.user.user_metadata?.["display_name"] ?? data.user.user_metadata?.["full_name"] ?? ""); await supabase.from("profiles").upsert({ id: data.user.id, display_name: displayName }); setName(displayName); }
     });
   }, []);
   useEffect(() => { document.documentElement.classList.toggle("dark", theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)); }, [theme]);
