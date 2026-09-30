@@ -111,7 +111,7 @@ export function AppLockSettings() {
     if (mode === "disable") { const { error } = await supabase.rpc("disable_app_lock", { _pin: current }); if (error) { setMsg(friendlyError(error)); return; } setMsg("App lock turned off."); reset(); await lock!.refresh(); return; }
     if (pin.length !== 4) { setMsg("Your PIN needs to be exactly 4 digits."); return; }
     if (pin !== confirm) { setMsg("Those PINs don't match."); return; }
-    const { error } = await supabase.rpc("set_app_pin", { _pin: pin, _current: mode === "change" ? current : undefined });
+    const { error } = await supabase.rpc("set_app_pin", mode === "change" ? { _pin: pin, _current: current } : { _pin: pin });
     if (error) { setMsg(friendlyError(error)); return; }
     sessionStorage.setItem(UNLOCK_KEY, "1"); localStorage.setItem(ACTIVE_KEY, String(Date.now()));
     setMsg(mode === "change" ? "PIN changed." : "App lock is on."); reset(); await lock!.refresh();

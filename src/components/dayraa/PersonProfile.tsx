@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ChevronLeft, LockKeyhole } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { publicItemsOf } from "@/lib/content";
 import { PersonAvatar, VisibilityBadge } from "./privacy";
 
 export function PersonProfile({ personId }: { personId: string }) {
@@ -11,7 +12,7 @@ export function PersonProfile({ personId }: { personId: string }) {
     queryFn: async () => {
       const { data: profile } = await supabase.from("profiles").select("id,display_name,username,avatar_url,bio").eq("id", personId).maybeSingle();
       if (!profile) return null;
-      const { data: items } = await supabase.from("life_items").select("*").eq("owner_id", personId).eq("visibility", "public").order("occurred_on", { ascending: false });
+      const { data: items } = await publicItemsOf(personId).order("occurred_on", { ascending: false });
       return { profile, items: items ?? [] };
     },
   });

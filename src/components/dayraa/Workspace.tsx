@@ -46,7 +46,7 @@ export function Workspace({ view, personId }: { view: View; personId?: string })
   const [month, setMonth] = useState(new Date()); const [selectedDate, setSelectedDate] = useState(today());
   const [search, setSearch] = useState(""); const [saveState, setSaveState] = useState<"" | "saved" | "failed">("");
   const draftScope = editor ? (editing ? `item-${editing.id}` : `new-${editor}`) : null;
-  useEffect(() => { if (userId && draftScope && (title || body)) { const t = setTimeout(() => writeDraft(draftKey(userId, draftScope), { title, body }), 400); return () => clearTimeout(t); } }, [userId, draftScope, title, body]);
+  useEffect(() => { if (userId && draftScope && (title || body)) { const t = setTimeout(() => writeDraft(draftKey(userId, draftScope), { title, body }), 400); return () => clearTimeout(t); } return undefined; }, [userId, draftScope, title, body]);
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
