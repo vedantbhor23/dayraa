@@ -10,33 +10,179 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedDiaryRouteImport } from './routes/_authenticated/diary'
+import { Route as AuthenticatedEventRouteImport } from './routes/_authenticated/event'
+import { Route as AuthenticatedGoalRouteImport } from './routes/_authenticated/goal'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedMemoryRouteImport } from './routes/_authenticated/memory'
+import { Route as AuthenticatedNoteRouteImport } from './routes/_authenticated/note'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedTaskRouteImport } from './routes/_authenticated/task'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDiaryRoute = AuthenticatedDiaryRouteImport.update({
+  id: '/diary',
+  path: '/diary',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventRoute = AuthenticatedEventRouteImport.update({
+  id: '/event',
+  path: '/event',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedGoalRoute = AuthenticatedGoalRouteImport.update({
+  id: '/goal',
+  path: '/goal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMemoryRoute = AuthenticatedMemoryRouteImport.update({
+  id: '/memory',
+  path: '/memory',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNoteRoute = AuthenticatedNoteRouteImport.update({
+  id: '/note',
+  path: '/note',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTaskRoute = AuthenticatedTaskRouteImport.update({
+  id: '/task',
+  path: '/task',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/diary': typeof AuthenticatedDiaryRoute
+  '/event': typeof AuthenticatedEventRoute
+  '/goal': typeof AuthenticatedGoalRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/memory': typeof AuthenticatedMemoryRoute
+  '/note': typeof AuthenticatedNoteRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/task': typeof AuthenticatedTaskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/diary': typeof AuthenticatedDiaryRoute
+  '/event': typeof AuthenticatedEventRoute
+  '/goal': typeof AuthenticatedGoalRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/memory': typeof AuthenticatedMemoryRoute
+  '/note': typeof AuthenticatedNoteRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/task': typeof AuthenticatedTaskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/diary': typeof AuthenticatedDiaryRoute
+  '/_authenticated/event': typeof AuthenticatedEventRoute
+  '/_authenticated/goal': typeof AuthenticatedGoalRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/memory': typeof AuthenticatedMemoryRoute
+  '/_authenticated/note': typeof AuthenticatedNoteRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/task': typeof AuthenticatedTaskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/diary'
+    | '/event'
+    | '/goal'
+    | '/home'
+    | '/memory'
+    | '/note'
+    | '/profile'
+    | '/settings'
+    | '/task'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/diary'
+    | '/event'
+    | '/goal'
+    | '/home'
+    | '/memory'
+    | '/note'
+    | '/profile'
+    | '/settings'
+    | '/task'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/diary'
+    | '/_authenticated/event'
+    | '/_authenticated/goal'
+    | '/_authenticated/home'
+    | '/_authenticated/memory'
+    | '/_authenticated/note'
+    | '/_authenticated/profile'
+    | '/_authenticated/settings'
+    | '/_authenticated/task'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +194,125 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/diary': {
+      id: '/_authenticated/diary'
+      path: '/diary'
+      fullPath: '/diary'
+      preLoaderRoute: typeof AuthenticatedDiaryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/event': {
+      id: '/_authenticated/event'
+      path: '/event'
+      fullPath: '/event'
+      preLoaderRoute: typeof AuthenticatedEventRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/goal': {
+      id: '/_authenticated/goal'
+      path: '/goal'
+      fullPath: '/goal'
+      preLoaderRoute: typeof AuthenticatedGoalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/memory': {
+      id: '/_authenticated/memory'
+      path: '/memory'
+      fullPath: '/memory'
+      preLoaderRoute: typeof AuthenticatedMemoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/note': {
+      id: '/_authenticated/note'
+      path: '/note'
+      fullPath: '/note'
+      preLoaderRoute: typeof AuthenticatedNoteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/task': {
+      id: '/_authenticated/task'
+      path: '/task'
+      fullPath: '/task'
+      preLoaderRoute: typeof AuthenticatedTaskRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDiaryRoute: typeof AuthenticatedDiaryRoute
+  AuthenticatedEventRoute: typeof AuthenticatedEventRoute
+  AuthenticatedGoalRoute: typeof AuthenticatedGoalRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedMemoryRoute: typeof AuthenticatedMemoryRoute
+  AuthenticatedNoteRoute: typeof AuthenticatedNoteRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTaskRoute: typeof AuthenticatedTaskRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDiaryRoute: AuthenticatedDiaryRoute,
+  AuthenticatedEventRoute: AuthenticatedEventRoute,
+  AuthenticatedGoalRoute: AuthenticatedGoalRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedMemoryRoute: AuthenticatedMemoryRoute,
+  AuthenticatedNoteRoute: AuthenticatedNoteRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTaskRoute: AuthenticatedTaskRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
