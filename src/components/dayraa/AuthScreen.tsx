@@ -18,7 +18,8 @@ export function AuthScreen() {
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => { if (data.user) navigate({ to: "/home", replace: true }); });
+  async function goStart() { const { data } = await supabase.auth.getUser(); let page = "home"; if (data.user) { const { data: p } = await supabase.from("profiles").select("start_page").eq("id", data.user.id).maybeSingle(); if (p?.start_page) page = p.start_page; } navigate({ to: `/${page}` as "/home", replace: true }); }
+    supabase.auth.getUser().then(({ data }) => { if (data.user) void goStart(); });
   }, [navigate]);
 
   async function submit(event: FormEvent) {
@@ -33,12 +34,12 @@ export function AuthScreen() {
         if (error) throw error;
         if (data.user && data.session) {
           await supabase.from("profiles").upsert({ id: data.user.id, display_name: name.trim() });
-          navigate({ to: "/home", replace: true });
+          void goStart();
         } else setNotice("Check your email to confirm your account, then come back to sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/home", replace: true });
+        void goStart();
       }
     } catch (e) { setError(e instanceof Error ? e.message : "Something went wrong. Please try again."); }
     finally { setBusy(false); }
@@ -49,7 +50,7 @@ export function AuthScreen() {
     try {
       const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
       if (result.error) throw result.error;
-      if (!result.redirected) navigate({ to: "/home", replace: true });
+      if (!result.redirected) void goStart();
     } catch (e) { setError(e instanceof Error ? e.message : "Google sign-in could not start."); setBusy(false); }
   }
 
