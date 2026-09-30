@@ -17,8 +17,8 @@ export function AuthScreen() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
-  useEffect(() => {
   async function goStart() { const { data } = await supabase.auth.getUser(); let page = "home"; if (data.user) { const { data: p } = await supabase.from("profiles").select("start_page").eq("id", data.user.id).maybeSingle(); if (p?.start_page) page = p.start_page; } navigate({ to: `/${page}` as "/home", replace: true }); }
+  useEffect(() => {
     supabase.auth.getUser().then(({ data }) => { if (data.user) void goStart(); });
   }, [navigate]);
 
