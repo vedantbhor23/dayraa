@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      life_items: {
+        Row: {
+          body: string
+          completed: boolean
+          created_at: string
+          due_on: string | null
+          id: string
+          kind: string
+          mood: string | null
+          occurred_on: string
+          owner_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          completed?: boolean
+          created_at?: string
+          due_on?: string | null
+          id?: string
+          kind: string
+          mood?: string | null
+          occurred_on?: string
+          owner_id: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          completed?: boolean
+          created_at?: string
+          due_on?: string | null
+          id?: string
+          kind?: string
+          mood?: string | null
+          occurred_on?: string
+          owner_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          id: string
+          theme: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          id: string
+          theme?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          theme?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
