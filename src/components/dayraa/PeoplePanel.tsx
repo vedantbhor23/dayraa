@@ -70,7 +70,7 @@ export function PeoplePanel({ userId }: { userId: string | null }) {
     </div>
     <section className="mt-8 rounded-lg border border-border bg-card p-6">
       <h2 className="text-xl">Connections</h2>
-      {connected.length ? <div className="mt-4 grid gap-3 sm:grid-cols-2">{connected.map(p => <div key={p.connection_id} className="flex items-center gap-3"><PersonAvatar name={p.display_name} path={p.avatar_url} /><Link to="/people/$personId" params={{ personId: p.person_id }} className="flex-1 text-sm font-semibold hover:underline">{p.display_name}</Link><Button size="sm" variant="ghost" onClick={() => remove(p.connection_id, `Remove ${p.display_name}? Anything you shared with each other will stop being visible.`)}>Remove</Button></div>)}</div> : <p className="mt-4 text-sm text-muted-foreground">No connections yet.</p>}
+      {connected.length ? <div className="mt-4 grid gap-3 sm:grid-cols-2">{connected.map(p => <div key={p.connection_id} className="flex items-center gap-3"><PersonAvatar name={p.display_name} path={p.avatar_url} /><Link to="/people/$personId" params={{ personId: p.person_id }} className="flex-1 text-sm font-semibold hover:underline">{p.display_name}</Link><Button size="sm" variant="ghost" onClick={() => remove(p.connection_id, `Remove ${p.display_name}? Anything you shared with each other will stop being visible.`)}>Remove</Button></div>)}</div> : <p className="mt-4 text-sm text-muted-foreground">Your people, your moments. Connect with someone to begin.</p>}
     </section>
     <section className="mt-8 rounded-lg border border-border bg-card p-6">
       <h2 className="text-xl">Shared with you</h2>
