@@ -176,6 +176,18 @@ export type Database = {
     Functions: {
       are_connected: { Args: { _a: string; _b: string }; Returns: boolean }
       can_view_profile: { Args: { _owner: string }; Returns: boolean }
+      my_connections: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          connection_id: string
+          display_name: string
+          incoming: boolean
+          person_id: string
+          status: string
+          username: string
+        }[]
+      }
       search_people: {
         Args: { _q: string }
         Returns: {
