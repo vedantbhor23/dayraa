@@ -10,7 +10,7 @@ export const visibilityOptions: { value: Visibility; label: string; hint: string
 ];
 
 export function VisibilityBadge({ value }: { value: string }) {
-  const opt = visibilityOptions.find(o => o.value === value) ?? visibilityOptions[0];
+  const opt = visibilityOptions.find(o => o.value === value) ?? visibilityOptions[0]!;
   const Icon = opt.icon;
   return <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"><Icon className="size-3" />{opt.label}</span>;
 }
