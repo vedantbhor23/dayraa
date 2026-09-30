@@ -71,13 +71,13 @@ export function AuthScreen() {
         {mode === "signup" && <label className="block text-sm font-medium">Your name<Input className="mt-2 h-11 bg-card" value={name} onChange={e => setName(e.target.value)} required placeholder="What should we call you?" /></label>}
         <label className="block text-sm font-medium">Email address<Input className="mt-2 h-11 bg-card" type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" /></label>
         {mode !== "forgot" && <label className="block text-sm font-medium">Password<Input className="mt-2 h-11 bg-card" type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} minLength={6} value={password} onChange={e => setPassword(e.target.value)} required placeholder="At least 6 characters" /></label>}
-        {mode === "signin" && <button type="button" className="block ml-auto text-xs font-semibold text-primary hover:underline" onClick={() => { setMode("forgot"); setError(""); setNotice(""); }}>Forgot password?</button>}
+        {mode === "signin" && <Button type="button" variant="link" size="sm" className="ml-auto flex px-0" onClick={() => { setMode("forgot"); setError(""); setNotice(""); }}>Forgot password?</Button>}
         {error && <p role="alert" className="rounded-md bg-accent px-3 py-2 text-sm text-destructive">{error}</p>}
         {notice && <p role="status" className="rounded-md bg-leaf px-3 py-2 text-sm text-leaf-foreground">{notice}</p>}
         <Button type="submit" disabled={busy} className="h-11 w-full justify-between px-5">{busy ? "Please wait…" : mode === "signup" ? "Create my space" : mode === "forgot" ? "Send reset link" : "Sign in"}<ArrowRight /></Button>
       </form>
       {mode !== "forgot" && <><div className="my-6 flex items-center gap-4 text-xs text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">or</div><Button variant="outline" className="h-11 w-full bg-card" disabled={busy} onClick={googleSignIn}>Continue with Google</Button></>}
-      <p className="mt-8 text-center text-sm text-muted-foreground">{mode === "signin" ? "New to Dayraa?" : mode === "signup" ? "Already have a space?" : "Remembered your password?"} <button type="button" className="font-semibold text-primary hover:underline" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setNotice(""); }}>{mode === "signin" ? "Create an account" : "Sign in"}</button></p>
+      <p className="mt-8 text-center text-sm text-muted-foreground">{mode === "signin" ? "New to Dayraa?" : mode === "signup" ? "Already have a space?" : "Remembered your password?"} <Button type="button" variant="link" className="h-auto px-1 py-0 font-semibold" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setNotice(""); }}>{mode === "signin" ? "Create an account" : "Sign in"}</Button></p>
       <p className="mt-10 text-center text-xs text-muted-foreground">Your story stays yours. Nothing is shared unless you choose to.</p>
     </div></div>
   </main>;

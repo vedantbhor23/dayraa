@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek, subMonths } from "date-fns";
-import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2, ChevronLeft, ChevronRight, Circle, Heart, Home, LockKeyhole, Menu, MoreHorizontal, NotebookPen, Plus, Search, Settings, Sparkle, Target, Trash2, Users, X } from "lucide-react";
+import { addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, isSameMonth, startOfMonth, startOfWeek, subMonths } from "date-fns";
+import { ArrowRight, BookOpen, CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Circle, Heart, Home, LockKeyhole, Menu, MoreHorizontal, NotebookPen, Plus, Search, Settings, Sparkle, Target, Trash2, Users, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/dayraa-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
