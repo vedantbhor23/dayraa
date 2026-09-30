@@ -26,6 +26,9 @@ export function Workspace({ view }: { view: View }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [name, setName] = useState(""); const [username, setUsername] = useState("");
   const [theme, setTheme] = useState("system");
+  const [bio, setBio] = useState(""); const [weekStart, setWeekStart] = useState("monday"); const [startPage, setStartPage] = useState("home");
+  const [avatarPath, setAvatarPath] = useState<string | null>(null); const [avatarUrl, setAvatarUrl] = useState<string | null>(null); const [uploading, setUploading] = useState(false);
+  const [email, setEmail] = useState(""); const [newPassword, setNewPassword] = useState(""); const [confirmPassword, setConfirmPassword] = useState(""); const [pwMessage, setPwMessage] = useState("");
   const [editor, setEditor] = useState<Kind | null>(null); const [editing, setEditing] = useState<Item | null>(null);
   const [title, setTitle] = useState(""); const [body, setBody] = useState(""); const [date, setDate] = useState(today()); const [mood, setMood] = useState<string | null>(null);
   const [saving, setSaving] = useState(false); const [message, setMessage] = useState(""); const [menuOpen, setMenuOpen] = useState(false); const [quickOpen, setQuickOpen] = useState(false);
@@ -35,12 +38,16 @@ export function Workspace({ view }: { view: View }) {
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) return;
-      setUserId(data.user.id);
-      const { data: profile } = await supabase.from("profiles").select("display_name,username,theme").eq("id", data.user.id).maybeSingle();
-      if (profile) { setName(profile.display_name); setUsername(profile.username ?? ""); setTheme(profile.theme); }
+      setUserId(data.user.id); setEmail(data.user.email ?? "");
+      const { data: profile } = await supabase.from("profiles").select("display_name,username,theme,avatar_url,bio,week_start,start_page").eq("id", data.user.id).maybeSingle();
+      if (profile) { setName(profile.display_name); setUsername(profile.username ?? ""); setTheme(profile.theme); setBio(profile.bio); setWeekStart(profile.week_start); setStartPage(profile.start_page); setAvatarPath(profile.avatar_url); }
       else { const displayName = String(data.user.user_metadata?.["display_name"] ?? data.user.user_metadata?.["full_name"] ?? ""); await supabase.from("profiles").upsert({ id: data.user.id, display_name: displayName }); setName(displayName); }
     });
   }, []);
+  useEffect(() => {
+    if (!avatarPath) { setAvatarUrl(null); return; }
+    supabase.storage.from("avatars").createSignedUrl(avatarPath, 60 * 60).then(({ data }) => setAvatarUrl(data?.signedUrl ?? null));
+  }, [avatarPath]);
   useEffect(() => { document.documentElement.classList.toggle("dark", theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)); }, [theme]);
   const { data: items = [], isLoading, error: loadError } = useQuery({ queryKey: ["life-items", userId], enabled: !!userId, queryFn: async () => {
     const { data, error } = await supabase.from("life_items").select("*").order("occurred_on", { ascending: false }).order("created_at", { ascending: false });
