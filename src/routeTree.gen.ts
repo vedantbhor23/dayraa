@@ -19,9 +19,11 @@ import { Route as AuthenticatedGoalRouteImport } from './routes/_authenticated/g
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedMemoryRouteImport } from './routes/_authenticated/memory'
 import { Route as AuthenticatedNoteRouteImport } from './routes/_authenticated/note'
+import { Route as AuthenticatedPeopleRouteImport } from './routes/_authenticated/people'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTaskRouteImport } from './routes/_authenticated/task'
+import { Route as AuthenticatedPeoplePersonIdRouteImport } from './routes/_authenticated/people.$personId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -72,6 +74,11 @@ const AuthenticatedNoteRoute = AuthenticatedNoteRouteImport.update({
   path: '/note',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPeopleRoute = AuthenticatedPeopleRouteImport.update({
+  id: '/people',
+  path: '/people',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -87,6 +94,12 @@ const AuthenticatedTaskRoute = AuthenticatedTaskRouteImport.update({
   path: '/task',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPeoplePersonIdRoute =
+  AuthenticatedPeoplePersonIdRouteImport.update({
+    id: '/$personId',
+    path: '/$personId',
+    getParentRoute: () => AuthenticatedPeopleRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -98,9 +111,11 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/memory': typeof AuthenticatedMemoryRoute
   '/note': typeof AuthenticatedNoteRoute
+  '/people': typeof AuthenticatedPeopleRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/task': typeof AuthenticatedTaskRoute
+  '/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -112,9 +127,11 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeRoute
   '/memory': typeof AuthenticatedMemoryRoute
   '/note': typeof AuthenticatedNoteRoute
+  '/people': typeof AuthenticatedPeopleRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/task': typeof AuthenticatedTaskRoute
+  '/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -128,9 +145,11 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/memory': typeof AuthenticatedMemoryRoute
   '/_authenticated/note': typeof AuthenticatedNoteRoute
+  '/_authenticated/people': typeof AuthenticatedPeopleRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/task': typeof AuthenticatedTaskRoute
+  '/_authenticated/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,9 +163,11 @@ export interface FileRouteTypes {
     | '/home'
     | '/memory'
     | '/note'
+    | '/people'
     | '/profile'
     | '/settings'
     | '/task'
+    | '/people/$personId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -158,9 +179,11 @@ export interface FileRouteTypes {
     | '/home'
     | '/memory'
     | '/note'
+    | '/people'
     | '/profile'
     | '/settings'
     | '/task'
+    | '/people/$personId'
   id:
     | '__root__'
     | '/'
@@ -173,9 +196,11 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/memory'
     | '/_authenticated/note'
+    | '/_authenticated/people'
     | '/_authenticated/profile'
     | '/_authenticated/settings'
     | '/_authenticated/task'
+    | '/_authenticated/people/$personId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -257,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNoteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/people': {
+      id: '/_authenticated/people'
+      path: '/people'
+      fullPath: '/people'
+      preLoaderRoute: typeof AuthenticatedPeopleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -278,8 +310,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTaskRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/people/$personId': {
+      id: '/_authenticated/people/$personId'
+      path: '/$personId'
+      fullPath: '/people/$personId'
+      preLoaderRoute: typeof AuthenticatedPeoplePersonIdRouteImport
+      parentRoute: typeof AuthenticatedPeopleRoute
+    }
   }
 }
+
+interface AuthenticatedPeopleRouteChildren {
+  AuthenticatedPeoplePersonIdRoute: typeof AuthenticatedPeoplePersonIdRoute
+}
+
+const AuthenticatedPeopleRouteChildren: AuthenticatedPeopleRouteChildren = {
+  AuthenticatedPeoplePersonIdRoute: AuthenticatedPeoplePersonIdRoute,
+}
+
+const AuthenticatedPeopleRouteWithChildren =
+  AuthenticatedPeopleRoute._addFileChildren(AuthenticatedPeopleRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDiaryRoute: typeof AuthenticatedDiaryRoute
@@ -288,6 +338,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedMemoryRoute: typeof AuthenticatedMemoryRoute
   AuthenticatedNoteRoute: typeof AuthenticatedNoteRoute
+  AuthenticatedPeopleRoute: typeof AuthenticatedPeopleRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTaskRoute: typeof AuthenticatedTaskRoute
@@ -300,6 +351,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedMemoryRoute: AuthenticatedMemoryRoute,
   AuthenticatedNoteRoute: AuthenticatedNoteRoute,
+  AuthenticatedPeopleRoute: AuthenticatedPeopleRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTaskRoute: AuthenticatedTaskRoute,

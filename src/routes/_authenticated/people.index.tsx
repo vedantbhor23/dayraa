@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Workspace } from "@/components/dayraa/Workspace";
 
-export const Route = createFileRoute("/_authenticated/people")({
+export const Route = createFileRoute("/_authenticated/people/")({
   head: () => ({ meta: [
     { title: "People — Dayraa" },
     { name: "description", content: "Find people, manage connections, and see what's shared with you." },
