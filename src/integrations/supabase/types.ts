@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_locks: {
+        Row: {
+          auto_lock_minutes: number
+          enabled: boolean
+          failed_attempts: number
+          locked_until: string | null
+          pin_hash: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_lock_minutes?: number
+          enabled?: boolean
+          failed_attempts?: number
+          locked_until?: string | null
+          pin_hash?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_lock_minutes?: number
+          enabled?: boolean
+          failed_attempts?: number
+          locked_until?: string | null
+          pin_hash?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connections: {
         Row: {
           addressee_id: string
@@ -41,6 +71,68 @@ export type Database = {
         }
         Relationships: []
       }
+      internal_job_tokens: {
+        Row: {
+          name: string
+          token: string
+        }
+        Insert: {
+          name: string
+          token?: string
+        }
+        Update: {
+          name?: string
+          token?: string
+        }
+        Relationships: []
+      }
+      item_attachments: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          item_id: string
+          kind: string
+          label: string
+          owner_id: string
+          storage_path: string | null
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          item_id: string
+          kind: string
+          label?: string
+          owner_id: string
+          storage_path?: string | null
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          item_id?: string
+          kind?: string
+          label?: string
+          owner_id?: string
+          storage_path?: string | null
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_attachments_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "life_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       item_shares: {
         Row: {
           can_edit: boolean
@@ -49,6 +141,7 @@ export type Database = {
           id: string
           item_id: string
           owner_id: string
+          permissions: string[]
         }
         Insert: {
           can_edit?: boolean
@@ -57,6 +150,7 @@ export type Database = {
           id?: string
           item_id: string
           owner_id: string
+          permissions?: string[]
         }
         Update: {
           can_edit?: boolean
@@ -65,6 +159,7 @@ export type Database = {
           id?: string
           item_id?: string
           owner_id?: string
+          permissions?: string[]
         }
         Relationships: [
           {
@@ -81,9 +176,11 @@ export type Database = {
           body: string
           completed: boolean
           created_at: string
+          deleted_at: string | null
           due_on: string | null
           id: string
           kind: string
+          metadata: Json
           mood: string | null
           occurred_on: string
           owner_id: string
@@ -95,9 +192,11 @@ export type Database = {
           body?: string
           completed?: boolean
           created_at?: string
+          deleted_at?: string | null
           due_on?: string | null
           id?: string
           kind: string
+          metadata?: Json
           mood?: string | null
           occurred_on?: string
           owner_id: string
@@ -109,9 +208,11 @@ export type Database = {
           body?: string
           completed?: boolean
           created_at?: string
+          deleted_at?: string | null
           due_on?: string | null
           id?: string
           kind?: string
+          metadata?: Json
           mood?: string | null
           occurred_on?: string
           owner_id?: string
@@ -125,8 +226,10 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string
+          contact_discovery: boolean
           created_at: string
           default_visibility: string
+          deletion_requested_at: string | null
           discoverability: string
           display_name: string
           id: string
@@ -140,8 +243,10 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string
+          contact_discovery?: boolean
           created_at?: string
           default_visibility?: string
+          deletion_requested_at?: string | null
           discoverability?: string
           display_name?: string
           id: string
@@ -155,8 +260,10 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string
+          contact_discovery?: boolean
           created_at?: string
           default_visibility?: string
+          deletion_requested_at?: string | null
           discoverability?: string
           display_name?: string
           id?: string
@@ -176,6 +283,17 @@ export type Database = {
     Functions: {
       are_connected: { Args: { _a: string; _b: string }; Returns: boolean }
       can_view_profile: { Args: { _owner: string }; Returns: boolean }
+      cancel_account_deletion: { Args: never; Returns: undefined }
+      disable_app_lock: { Args: { _pin: string }; Returns: undefined }
+      get_app_lock: {
+        Args: never
+        Returns: {
+          auto_lock_minutes: number
+          enabled: boolean
+          has_pin: boolean
+        }[]
+      }
+      item_access: { Args: { _item: string; _perm: string }; Returns: boolean }
       my_connections: {
         Args: never
         Returns: {
@@ -188,6 +306,9 @@ export type Database = {
           username: string
         }[]
       }
+      recently_signed_in: { Args: { _minutes?: number }; Returns: boolean }
+      request_account_deletion: { Args: never; Returns: string }
+      reset_app_pin_after_signin: { Args: never; Returns: undefined }
       search_people: {
         Args: { _q: string }
         Returns: {
@@ -197,6 +318,12 @@ export type Database = {
           username: string
         }[]
       }
+      set_app_lock_minutes: { Args: { _minutes: number }; Returns: undefined }
+      set_app_pin: {
+        Args: { _current?: string; _pin: string }
+        Returns: undefined
+      }
+      verify_app_pin: { Args: { _pin: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never

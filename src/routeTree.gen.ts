@@ -20,10 +20,12 @@ import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/h
 import { Route as AuthenticatedMemoryRouteImport } from './routes/_authenticated/memory'
 import { Route as AuthenticatedNoteRouteImport } from './routes/_authenticated/note'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTaskRouteImport } from './routes/_authenticated/task'
 import { Route as AuthenticatedPeopleIndexRouteImport } from './routes/_authenticated/people.index'
 import { Route as AuthenticatedPeoplePersonIdRouteImport } from './routes/_authenticated/people.$personId'
+import { Route as ApiPublicPurgeAccountsRouteImport } from './routes/api/public/purge-accounts'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -79,6 +81,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -101,6 +108,11 @@ const AuthenticatedPeoplePersonIdRoute =
     path: '/people/$personId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicPurgeAccountsRoute = ApiPublicPurgeAccountsRouteImport.update({
+  id: '/api/public/purge-accounts',
+  path: '/api/public/purge-accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -113,9 +125,11 @@ export interface FileRoutesByFullPath {
   '/memory': typeof AuthenticatedMemoryRoute
   '/note': typeof AuthenticatedNoteRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/task': typeof AuthenticatedTaskRoute
   '/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
+  '/api/public/purge-accounts': typeof ApiPublicPurgeAccountsRoute
   '/people/': typeof AuthenticatedPeopleIndexRoute
 }
 export interface FileRoutesByTo {
@@ -129,9 +143,11 @@ export interface FileRoutesByTo {
   '/memory': typeof AuthenticatedMemoryRoute
   '/note': typeof AuthenticatedNoteRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/task': typeof AuthenticatedTaskRoute
   '/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
+  '/api/public/purge-accounts': typeof ApiPublicPurgeAccountsRoute
   '/people': typeof AuthenticatedPeopleIndexRoute
 }
 export interface FileRoutesById {
@@ -147,9 +163,11 @@ export interface FileRoutesById {
   '/_authenticated/memory': typeof AuthenticatedMemoryRoute
   '/_authenticated/note': typeof AuthenticatedNoteRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/task': typeof AuthenticatedTaskRoute
   '/_authenticated/people/$personId': typeof AuthenticatedPeoplePersonIdRoute
+  '/api/public/purge-accounts': typeof ApiPublicPurgeAccountsRoute
   '/_authenticated/people/': typeof AuthenticatedPeopleIndexRoute
 }
 export interface FileRouteTypes {
@@ -165,9 +183,11 @@ export interface FileRouteTypes {
     | '/memory'
     | '/note'
     | '/profile'
+    | '/search'
     | '/settings'
     | '/task'
     | '/people/$personId'
+    | '/api/public/purge-accounts'
     | '/people/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -181,9 +201,11 @@ export interface FileRouteTypes {
     | '/memory'
     | '/note'
     | '/profile'
+    | '/search'
     | '/settings'
     | '/task'
     | '/people/$personId'
+    | '/api/public/purge-accounts'
     | '/people'
   id:
     | '__root__'
@@ -198,9 +220,11 @@ export interface FileRouteTypes {
     | '/_authenticated/memory'
     | '/_authenticated/note'
     | '/_authenticated/profile'
+    | '/_authenticated/search'
     | '/_authenticated/settings'
     | '/_authenticated/task'
     | '/_authenticated/people/$personId'
+    | '/api/public/purge-accounts'
     | '/_authenticated/people/'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +233,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicPurgeAccountsRoute: typeof ApiPublicPurgeAccountsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -290,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/search': {
+      id: '/_authenticated/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -318,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPeoplePersonIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/purge-accounts': {
+      id: '/api/public/purge-accounts'
+      path: '/api/public/purge-accounts'
+      fullPath: '/api/public/purge-accounts'
+      preLoaderRoute: typeof ApiPublicPurgeAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -329,6 +368,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMemoryRoute: typeof AuthenticatedMemoryRoute
   AuthenticatedNoteRoute: typeof AuthenticatedNoteRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTaskRoute: typeof AuthenticatedTaskRoute
   AuthenticatedPeoplePersonIdRoute: typeof AuthenticatedPeoplePersonIdRoute
@@ -343,6 +383,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMemoryRoute: AuthenticatedMemoryRoute,
   AuthenticatedNoteRoute: AuthenticatedNoteRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTaskRoute: AuthenticatedTaskRoute,
   AuthenticatedPeoplePersonIdRoute: AuthenticatedPeoplePersonIdRoute,
@@ -357,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicPurgeAccountsRoute: ApiPublicPurgeAccountsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
